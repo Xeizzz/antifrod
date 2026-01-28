@@ -2,7 +2,7 @@ import logging
 
 from fastapi import FastAPI
 
-from app.api import healthz
+from app.api import healthz, antifraud
 
 
 logging.basicConfig(
@@ -16,3 +16,4 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 
 app.include_router(healthz.router)
+app.include_router(antifraud.router)

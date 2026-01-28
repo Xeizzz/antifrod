@@ -1,14 +1,18 @@
-from fastapi import APIRouter, Response, status, Depends
+from fastapi import APIRouter, HTTPException
+from typing import List
+
+
+from app.models.antifraud import AntifraudRequest, AntifraudResponse
+from app.service.antifraud_service import AntifraudService
+
 
 
 router = APIRouter(
-    prefix="/antifraudcheck",
+    prefix="/antifraudcheck", 
     tags=["antifraud"],
 )
 
-@router.post(
-"/check",
-response_model=
-summary="Проверка на стоп-факторы"
-response_description="Результат проверки"
-)
+@router.post("/check")
+async def check_antifraud(request: AntifraudRequest) -> AntifraudResponse:
+    """Эндпоинт проверки антифрода"""
+    return AntifraudService.check_client(request)

@@ -52,19 +52,6 @@ class BirthDate(BaseModel):
         except ValueError:
             raise ValueError('Дата рождения должна быть в формате DD.MM.YYYY')
 
-    def get_age(self):
-        birth_date = datetime.strptime(self.birthdate, "%d.%m.%Y").date()
-        today = date.today()
-        age = today.year - birth_date.year
-
-        if (today.month, today.day) < (birth_date.month, birth_date.day):
-            age -= 1
-
-        return age
-
-    def is_adult(self) -> bool:
-        return self.get_age() >= 18
-
 
 class AntifraudRequest(BaseModel):
     birth_date: str
@@ -79,3 +66,7 @@ class AntifraudRequest(BaseModel):
         elif info.field_name == 'phone_number':
             Phone(pnumber=v)
         return v
+
+class AntifraudResponse(BaseModel):
+    stop_factors: List[str]
+    result: bool
