@@ -8,11 +8,10 @@ from app.service.antifraud_service import AntifraudService
 
 
 router = APIRouter(
-    prefix="/antifraudcheck", 
+    prefix="/antifraud",
     tags=["antifraud"],
 )
 
 @router.post("/check")
 async def check_antifraud(request: AntifraudRequest) -> AntifraudResponse:
-    """Эндпоинт проверки антифрода"""
     return AntifraudService.check_client(request)

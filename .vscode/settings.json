@@ -19,5 +19,8 @@
     "python.testing.pytestEnabled": true,
     // https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#fonts
     "terminal.integrated.fontFamily": "MesloLGS NF",
-    "terminal.integrated.scrollback": 50000000
+    "terminal.integrated.scrollback": 50000000,
+    "python.testing.pytestArgs": [
+        "src"
+    ]
 }
