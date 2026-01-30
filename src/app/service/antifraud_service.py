@@ -1,7 +1,8 @@
 #логика сервиса
 from datetime import datetime, date
-from app.models.antifraud import AntifraudRequest, AntifraudResponse 
-
+from app.models.model_antifraud import AntifraudRequest, AntifraudResponse
+import json
+from app.redis_client import get, set
 
 class AntifraudService:
 
@@ -21,7 +22,14 @@ class AntifraudService:
         return AntifraudService.calculate_age(birth_date_str) >= 18
 
     @classmethod
-    def check_client(cls, request: AntifraudRequest) -> AntifraudResponse:
+    async def check_client(cls, request: AntifraudRequest) -> AntifraudResponse:
+
+        cache_key = f"antifraud:{request.phone_number}"
+
+        cached_result = await get(cache_key)
+        if cached_result:
+            return AntifraudResponse(**json.loads(cached_result))
+
         stop_factors = []
 
         if not cls.is_adult(request.birth_date):
@@ -32,7 +40,15 @@ class AntifraudService:
         if unclosed_loans:
             stop_factors.append(f"Найдено {len(unclosed_loans)} незакрытых займов")
 
-        return AntifraudResponse(
+        result = AntifraudResponse(
             stop_factors=stop_factors,
             result=len(stop_factors) == 0
         )
+
+        if result.result:
+            await set(
+                        cache_key,
+                        json.dumps(result.model_dump(), ensure_ascii=False)
+                    )
+
+        return result

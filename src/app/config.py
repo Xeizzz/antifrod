@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     port: int
     environment: str
     debug: bool
+    redis_host: str = "localhost"
+    redis_port: int = 6379
 
     @classmethod
     def from_yaml(cls) -> 'Settings':
