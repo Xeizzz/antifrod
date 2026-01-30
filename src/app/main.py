@@ -52,13 +52,13 @@ async def test_redis():
 
     try:
         if redis_client:
-            # Тест 1: SET
+
             results["set_result"] = await redis_client.set(test_key, test_value)
 
-            # Тест 2: GET
+
             results["get_result"] = await redis_client.get(test_key)
 
-            # Тест 3: Прямой через redis-cli
+
             results["direct_test"] = f"Run: redis-cli get '{test_key}'"
         else:
             results["error"] = "Redis client is None"

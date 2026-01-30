@@ -27,7 +27,7 @@ def test_antifraud_check_failed(client):
         "/antifraud/check",
         json={
             "birth_date": "22.08.2010",
-            "phone_number": "+79235648563",
+            "phone_number": "+79235848563",
             "loans_history": []
         }
     )
