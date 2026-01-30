@@ -1,17 +1,36 @@
+## Используемые технологии
+- Python
+- FastAPI
+- Pydantic
+- Redis
+- Pytest
+- Prometheus
+- Grafana
+- Docker / Docker Compose
 
-
-Запуск
+Запуск локальный
 ```bash
 uv run src/run.py
 ```
 
 
-Сборка в Docker
+### Запуск
+Из корня проекта выполните команду:
 ```bash
-docker build -t service-template:latest .
+docker compose up --build
 ```
+### Доступные адреса
+- Swagger UI: http://localhost:8080/docs
+- Метрики сервиса: http://localhost:8080/metrics
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000
 
-Запуск в Docker
+### Данные для входа в Grafana
+- Логин: admin
+- Пароль: admin
+
+
+### Запуск всех тестов
 ```bash
-docker run -p 8080:8080 service-template:latest
+pytest src/tests/ -v
 ```

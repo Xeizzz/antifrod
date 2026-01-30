@@ -2,7 +2,12 @@
 from datetime import datetime, date
 from app.models.model_antifraud import AntifraudRequest, AntifraudResponse
 import json
+import time
 from app.redis_client import get, set
+from app.prometheus.prometheus_metrics import (
+    ANTIFRAUD_REQUEST_COUNT,
+    ANTIFRAUD_PROCESSING_TIME,
+    )
 
 class AntifraudService:
 
@@ -24,11 +29,23 @@ class AntifraudService:
     @classmethod
     async def check_client(cls, request: AntifraudRequest) -> AntifraudResponse:
 
-        cache_key = f"antifraud:{request.phone_number}"
 
+        cache_key = f"antifraud:{request.phone_number}"
+        start_time = time.time()
         cached_result = await get(cache_key)
+
         if cached_result:
-            return AntifraudResponse(**json.loads(cached_result))
+
+
+            result = AntifraudResponse(**json.loads(cached_result))
+
+            result_label = "allowed" if result.result else "blocked"
+            ANTIFRAUD_REQUEST_COUNT.labels(result=result_label).inc()
+
+            processing_time = time.time() - start_time
+            ANTIFRAUD_PROCESSING_TIME.observe(processing_time)
+
+            return result
 
         stop_factors = []
 
@@ -50,5 +67,11 @@ class AntifraudService:
                         cache_key,
                         json.dumps(result.model_dump(), ensure_ascii=False)
                     )
+
+        result_label = "allowed" if result.result else "blocked"
+        ANTIFRAUD_REQUEST_COUNT.labels(result=result_label).inc()
+
+        processing_time = time.time() - start_time
+        ANTIFRAUD_PROCESSING_TIME.observe(processing_time)
 
         return result

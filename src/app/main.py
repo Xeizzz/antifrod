@@ -12,6 +12,9 @@ from app.config import get_settings
 
 from app.redis_client import connect_redis, redis_client
 
+from app.prometheus.prometheus_metrics import PrometheusMiddleware, get_metrics
+
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -31,8 +34,11 @@ app = FastAPI(lifespan = lifespan)
 
 app.include_router(healthz.router)
 app.include_router(antifraud.router)
+app.add_middleware(PrometheusMiddleware)
 
-
+@app.get("/metrics")
+async def metrics():
+    return get_metrics()
 
 import time
 
