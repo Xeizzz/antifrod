@@ -26,13 +26,13 @@
 - Grafana
 - Docker / Docker Compose
 
-### Доступные адреса
+## Доступные адреса
 - Swagger UI: http://localhost:8080/docs
 - Метрики сервиса: http://localhost:8080/metrics
 - Prometheus: http://localhost:9090
 - Grafana: http://localhost:3000
 
-### Доступные метрики
+## Доступные метрики
 
 # Общее кол-во запросов
 - http_requests_total
@@ -44,7 +44,7 @@
 - rate(antifraud_processing_seconds_sum[5m]) / rate(antifraud_processing_seconds_count[5m])
 
 
-### Данные для входа в Grafana
+## Данные для входа в Grafana
 - Логин: admin
 - Пароль: admin
 
