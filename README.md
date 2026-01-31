@@ -36,10 +36,13 @@
 
 Общее кол-во запросов
 - http_requests_total
+
 Кол-во запросов к антифроду
 - antifraud_requests_total
+
 Среднее время HTTP запросов
 - rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])
+
 Среднее время обработки антифрода
 - rate(antifraud_processing_seconds_sum[5m]) / rate(antifraud_processing_seconds_count[5m])
 
